@@ -51,7 +51,7 @@ def generateRecipe(dish, ingredients, appliances, diet, servings, price):
     prompt_template = f"Give me an in depth recipe for {servings} serving(s) of {dish}. The ingredients I currently have are {ingredients}. The appliances I can use are {appliances}. It must follow a {diet} diet. I want to spend at most ${price}."
     response = chat(
         [
-            SystemMessage(content='You are an AI Chef. Give an in depth recipe for the required amount of servings of the dish, including the ingredients, prices, steps, and nothing else.'),
+            SystemMessage(content='You are an AI Chef. Give an in depth recipe for the required amount of servings of the dish, including the time to make, ingredients, prices, steps, and nothing else.'),
             HumanMessage(content=prompt_template)
         ]
     )
