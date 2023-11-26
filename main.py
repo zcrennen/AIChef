@@ -47,6 +47,16 @@ def GDImage(prompt):
     #Display
     st.image(url, use_column_width=True)
 
+def generateRecipe(dish, ingredients, appliances, diet, servings, price):
+    prompt_template = f"Give me an in depth recipe for {servings} serving(s) of {dish}. The ingredients I currently have are {ingredients}. The appliances I can use are {appliances}. It must follow a {diet} diet. I want to spend at most ${price}."
+    response = chat(
+        [
+            SystemMessage(content='You are an AI Chef. Give an in depth recipe for the required amount of servings of the dish, including the ingredients, prices, steps, and nothing else.'),
+            HumanMessage(content=prompt_template)
+        ]
+    )
+    return response.content
+
 
 
 # Define the Streamlit app
@@ -70,6 +80,9 @@ def main():
                             dish = generateDish(genre=genre,ingredients=ingredients,appliances=appliances,diet=diet,servings=servings, price=price)
                             st.write(f'You can make {dish}')
                             GDImage(prompt=dish)
+                            recipe = generateRecipe(dish=dish,ingredients=ingredients,appliances=appliances,diet=diet,servings=servings, price=price)
+                            st.write(f'Here is the recipe for {dish}')
+                            st.write(recipe)
 
 # Run the Streamlit app
 if __name__ == '__main__':
