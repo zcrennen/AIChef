@@ -65,18 +65,22 @@ def main():
     st.title('AI Chef')
     st.header('Hello from your AI Chef! I will help you make a recipe')
     
-    genre = st.text_input('What type of food would you like to make (Italian, Mexican, etc)?')
+    genre_options = ['Mexican', 'Indian', 'Italian', 'Jamaican', 'American', 'Chinese', 'Japanese']
+    genre = st.selectbox("What type of food would you like to make?", genre_options)
     if genre:
         ingredients = st.text_input('What ingredients do you have to cook with?')
         if ingredients:
-            appliances = st.text_input('What appliances do you have to cook with (microwave, oven, etc)?')
+            appliance_options = ["None", "Oven", "Stove", "Microwave", "Blender", "Food Processor"]
+            appliances = st.multiselect("What appliances do you have to cook with?", appliance_options)
             if appliances:
-                diet = st.text_input('What sort of dietary restrictions do you have (vegetarian, keto, etc)?')
+                diet_options = ["None", "Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free", "Keto", "Carnivore"]
+                diet = st.multiselect("What sort of dietary restrictions do you have?", diet_options)
                 if diet:
                     servings = st.text_input('How many servings would you like to make?')
                     if servings:
-                        price = st.text_input('How much would you like to spend on this meal?')
-                        if price:
+                        price = st.slider("How much would you like to spend on this meal?", min_value=0, max_value=100, step=1, value=(10, 20), format=" $%d")
+                        submit_button = st.button("Submit")
+                        if submit_button:
                             dish = generateDish(genre=genre,ingredients=ingredients,appliances=appliances,diet=diet,servings=servings, price=price)
                             st.write(f'You can make {dish}')
                             GDImage(prompt=dish)
