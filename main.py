@@ -5,8 +5,6 @@
 import streamlit as st
 import openai
 from openai import OpenAI
-import base64
-import requests
 import os
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
@@ -19,7 +17,6 @@ api_key = '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'
 chat = ChatOpenAI(temperature=0.7, openai_api_key=api_key)
 #Initialize openai client
 client = OpenAI(openai_api_key=api_key)
-image_path = "image.jpeg"
 ##########################################
 
 def generateDish(genre, ingredients, appliances, diet, servings, price):
@@ -50,12 +47,6 @@ def GDImage(prompt):
     #Display
     st.image(url, use_column_width=True)
 
-def encode_image(image_path):
-  with open(image_path, "rb") as image_file:
-    return base64.b64encode(image_file.read()).decode('utf-8')
-
-base64_image = encode_image(image_path)
-
 def generateRecipe(dish, ingredients, appliances, diet, servings, price):
     prompt_template = f"Give me an in depth recipe for {servings} serving(s) of {dish}. The ingredients I currently have are {ingredients}. The appliances I can use are {appliances}. It must follow a {diet} restricted diet. I want to spend at most ${price}."
     response = chat(
@@ -78,36 +69,6 @@ def main():
     genre = st.selectbox("What type of food would you like to make?", genre_options)
     if genre:
         ingredients = st.text_input('What ingredients do you have to cook with?')
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}"
-            }
-
-        payload = {
-            "model": "gpt-4-vision-preview",
-            "messages": [
-                {
-                "role": "user",
-                "content": [
-                    {
-                    "type": "text",
-                    "text": "Tell me what food ingredients are in this picture. Write shortly, only list the ingredients and nothing else."
-                    },
-                    {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpeg;base64,{base64_image}"
-                    }
-                    }
-                ]
-                }
-            ],
-            "max_tokens": 300
-            }
-
-        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-        #print(response.json())
-        ingredients = response['content']
         if ingredients:
             appliance_options = ["None", "Oven", "Stove", "Microwave", "Blender", "Food Processor"]
             appliances = st.multiselect("What appliances do you have to cook with?", appliance_options)
