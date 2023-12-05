@@ -6,13 +6,15 @@ import streamlit as st
 import openai
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
 from langchain.llms import OpenAI
 
 ###################Init###################
 #Load in API Key
-api_key = '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'
+load_dotenv()
+api_key = os.getenv('OPENAI_API_KEY')
 #Initialize langchain chat client
 chat = ChatOpenAI(temperature=0.7, openai_api_key=api_key)
 #Initialize openai client
