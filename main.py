@@ -3,12 +3,11 @@
 # streamlit run .\main.py
 ##################
 import streamlit as st
-import openai
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage, SystemMessage, AIMessage
+from langchain.schema import HumanMessage, SystemMessage
 from langchain.llms import OpenAI
 
 ###################Init###################
@@ -38,9 +37,9 @@ def GDImage(prompt):
 
     #Generation
     response = client.images.generate(
-        model="dall-e-2",
+        model="dall-e-3",
         prompt=prompt,
-        size="512x512",
+        size="1024x1024",
         quality="standard",
         n=1,
     )
@@ -58,7 +57,6 @@ def generateRecipe(dish, ingredients, appliances, diet, servings, price):
         ]
     )
     return response.content
-
 
 
 # Define the Streamlit app
